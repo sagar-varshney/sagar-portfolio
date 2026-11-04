@@ -15,3 +15,9 @@ Serve `dist/` with any static HTTP server, for example `python3 -m http.server 4
 - `.openai/hosting.json`: Sites identity and hosting configuration
 
 The site uses system fonts and has no external runtime dependencies. Navigation works without JavaScript; project dialogs and filters require JavaScript. It includes reduced-motion support, visible focus states, a skip link, and native keyboard-accessible dialogs.
+
+## Render hosting
+
+Deploy this repository as a **Static Site** with branch `main`, publish directory `dist`, and build command `test -f dist/index.html`. No package installation, application server, database, or runtime secrets are required. Enable automatic deployment on commits to `main`.
+
+The `.openai/hosting.json` file records the earlier Sites deployment; Render serves only `dist/` and does not use that file.

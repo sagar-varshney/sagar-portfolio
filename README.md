@@ -25,3 +25,7 @@ System fonts and self-hosted runtime assets keep the page independent of third-p
 This repository is deployed as a Static Site: branch `main`, publish directory `dist`, build command `test -f dist/index.html`. No server, database, or runtime secrets are needed. The current public-repository connection requires manually triggering a deployment after pushing source updates; verify that the deployed commit becomes `live` before reporting publication.
 
 The `.openai/hosting.json` file records an earlier Sites deployment; Render serves only `dist/` and does not use that file.
+
+### Retired résumé URL
+
+Render's Redirects/Rewrites settings contain an exact-path redirect from `/assets/sagar-varshney-resume.pdf` to `/`. This prevents the old cached PDF download from remaining accessible after removal. When a revised résumé is supplied, publish it under a new filename and restore the portfolio links; the retired URL can remain redirected.

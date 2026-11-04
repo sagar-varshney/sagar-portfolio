@@ -1,6 +1,8 @@
 # Sagar Varshney — portfolio
 
-A buildless, responsive portfolio in `dist/`. All biographical content is based on the résumé supplied on 4 November 2026. Project illustrations are explicitly labeled as conceptual, rather than product screenshots. External project links are copied from the résumé; their availability has not been verified.
+Live portfolio: https://sagar-varshney-portfolio.onrender.com
+
+A buildless, responsive portfolio in `dist/`, with a dark starfield, an original procedural 3D robot, and an interactive technology showcase. The design takes inspiration from the visual direction of Kshitij Betwal's portfolio while retaining Sagar's content and original artwork. All biographical content is based on the résumé supplied on 4 November 2026. Project illustrations are explicitly labeled as conceptual. External project links are copied from the résumé; their availability has not been verified.
 
 ## Preview
 
@@ -10,11 +12,13 @@ Serve `dist/` with any static HTTP server, for example `python3 -m http.server 4
 
 - `dist/index.html`: portfolio content and project illustrations
 - `dist/style.css`: colors, typography, layout, and responsive styles
-- `dist/script.js`: project case studies and filtering
+- `dist/script.js`: case studies, filtering, navigation, motion controls, starfield, and technology carousel
+- `dist/robot.js`: original procedural Three.js robot and interaction
+- `dist/assets/vendor/`: self-hosted Three.js 0.180.0 modules and MIT license
 - `dist/assets/sagar-varshney-resume.pdf`: supplied résumé
 - `.openai/hosting.json`: Sites identity and hosting configuration
 
-The site uses system fonts and has no external runtime dependencies. Navigation works without JavaScript; project dialogs and filters require JavaScript. It includes reduced-motion support, visible focus states, a skip link, and native keyboard-accessible dialogs.
+The site uses system fonts, with all runtime assets hosted locally. Navigation and content remain available without JavaScript; the robot falls back to an original SVG illustration if WebGL fails. It includes reduced-motion support, a global animation pause control, visible focus states, a skip link, and native keyboard-accessible dialogs.
 
 ## Render hosting
 

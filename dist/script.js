@@ -55,7 +55,7 @@ document.querySelectorAll('[data-filter]').forEach(button => {
 });
 
 
-// Motion applies only to the workbench sculpture and small CSS details.
+// Shared motion state for the orbital scene and CSS details.
 const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
 let motionPaused=motionPreference.matches;
 const motionButton=document.querySelector('.motion-toggle');
@@ -69,7 +69,7 @@ navigation.querySelectorAll('a').forEach(link=>link.addEventListener('click',clo
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menuButton.getAttribute('aria-expanded')==='true'){closeMenu();menuButton.focus();}});
 document.addEventListener('click',event=>{if(!event.target.closest('.header'))closeMenu();});
 let progressScheduled=false;
-function updateProgress(){const total=document.documentElement.scrollHeight-innerHeight;document.querySelector('.scroll-progress').style.transform='scaleX('+Math.max(0,Math.min(1,scrollY/Math.max(1,total)))+')';const sections=[...document.querySelectorAll('main>section[id]')];let current='home';for(const section of sections){if(section.getBoundingClientRect().top<=innerHeight*.35)current=section.id;}navigation.querySelectorAll('a').forEach(link=>{const active=link.hash==='#'+current;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});progressScheduled=false;}
+function updateProgress(){document.querySelector('.header').classList.toggle('scrolled',scrollY>80);const total=document.documentElement.scrollHeight-innerHeight;document.querySelector('.scroll-progress').style.transform='scaleX('+Math.max(0,Math.min(1,scrollY/Math.max(1,total)))+')';const sections=[...document.querySelectorAll('main>section[id]')];let current='home';for(const section of sections){if(section.getBoundingClientRect().top<=innerHeight*.35)current=section.id;}navigation.querySelectorAll('a').forEach(link=>{const active=link.hash==='#'+current;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});progressScheduled=false;}
 addEventListener('scroll',()=>{if(!progressScheduled){progressScheduled=true;requestAnimationFrame(updateProgress);}},{passive:true});addEventListener('resize',updateProgress);updateProgress();
 const atomIcon='<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><ellipse cx="50" cy="50" rx="42" ry="15"/><ellipse cx="50" cy="50" rx="42" ry="15" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="42" ry="15" transform="rotate(120 50 50)"/><circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/></svg>';
 const dataIcon='<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="50" cy="23" rx="30" ry="12"/><path d="M20 23v52c0 16 60 16 60 0V23M20 40c0 16 60 16 60 0M20 57c0 16 60 16 60 0"/></svg>';
@@ -91,3 +91,13 @@ stackItems.forEach((item,index)=>{const button=document.createElement('button');
 function showStack(index){stackIndex=(index+stackItems.length)%stackItems.length;const item=stackItems[stackIndex];document.querySelector('#stack-counter').textContent=String(stackIndex+1).padStart(2,'0')+' / 08';document.querySelector('#stack-art-number').textContent=String(stackIndex+1).padStart(2,'0');document.querySelector('#stack-category').textContent=item.category;document.querySelector('#stack-name').textContent=item.name;document.querySelector('#stack-subtitle').textContent=item.subtitle;document.querySelector('#stack-description').textContent=item.description;document.querySelector('#stack-context').textContent=item.context;const icon=document.querySelector('#stack-icon');icon.innerHTML=item.icon;icon.style.color=item.color;pagination.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===stackIndex)));}
 showStack(0);
 document.querySelector('#copy-email').addEventListener('click',async()=>{const status=document.querySelector('#copy-status');try{await navigator.clipboard.writeText('sagarvarshney05@gmail.com');status.textContent='Email copied. Say hello!';}catch{status.textContent='sagarvarshney05@gmail.com';}});
+
+// The featured project selector also turns the orbital sculpture.
+const featuredProjects=[{key:'taskboard',name:'TaskBoard'},{key:'flow',name:'BriefActions'}];
+let featuredIndex=0;
+function featureProject(index,action){featuredIndex=(index+featuredProjects.length)%featuredProjects.length;const project=featuredProjects[featuredIndex];document.querySelector('#featured-number').textContent=String(featuredIndex+1).padStart(2,'0')+' / 02';document.querySelector('#featured-name').textContent=project.name;const open=document.querySelector('#hero-open');open.dataset.project=project.key;open.setAttribute('aria-label','Explore '+project.name);dispatchEvent(new CustomEvent('portfolio:scene',{detail:{action}}));}
+document.querySelector('#hero-prev').addEventListener('click',()=>featureProject(featuredIndex-1,'prev'));
+document.querySelector('#hero-next').addEventListener('click',()=>featureProject(featuredIndex+1,'next'));
+document.querySelector('#scene-reset').addEventListener('click',()=>dispatchEvent(new CustomEvent('portfolio:scene',{detail:{action:'reset'}})));
+document.querySelectorAll('[data-accent]').forEach(button=>button.addEventListener('click',()=>{document.documentElement.style.setProperty('--accent',button.dataset.accent);document.querySelectorAll('[data-accent]').forEach(swatch=>swatch.setAttribute('aria-pressed',String(swatch===button)));dispatchEvent(new CustomEvent('portfolio:scene',{detail:{accent:button.dataset.accent}}));}));
+document.addEventListener('click',event=>{if(!event.target.closest('.scene-settings'))document.querySelector('.scene-settings').open=false;});

@@ -95,11 +95,6 @@ if (container && canvas) {
     insigniaCanvas.width = 512;
     insigniaCanvas.height = 256;
     const insigniaContext = insigniaCanvas.getContext('2d');
-    insigniaContext.fillStyle = '#f4f6ee';
-    insigniaContext.font = '700 172px Arial, Helvetica, sans-serif';
-    insigniaContext.textAlign = 'center';
-    insigniaContext.textBaseline = 'middle';
-    insigniaContext.fillText('SV', 256, 140);
     const insigniaTexture = new THREE.CanvasTexture(insigniaCanvas);
     insigniaTexture.colorSpace = THREE.SRGBColorSpace;
     mesh(new THREE.PlaneGeometry(1.03, 0.515), new THREE.MeshBasicMaterial({map: insigniaTexture, transparent: true, depthWrite: false, toneMapped: false}), lens, [0, 0.035, 0.08]);
@@ -124,62 +119,76 @@ if (container && canvas) {
     const random = () => {seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646;};
     const planetRadius = 18.8;
     const planetGeometry = new THREE.SphereGeometry(planetRadius, 256, 144);
-    const craterCenters = Array.from({length: 56}, () => ({
+    // Turn the UV pole away first, then form relief on the visible upper surface.
+    planetGeometry.rotateZ(Math.PI / 2);
+    const craterCenters = Array.from({length: 26}, () => ({
       direction: new THREE.Vector3((random() - 0.5) * 1.3, 1, random() * 0.85 + 0.08).normalize(),
       radius: 0.018 + random() * 0.052,
-      depth: 0.12 + random() * 0.20,
+      depth: 0.07 + random() * 0.09,
     }));
     const positions = planetGeometry.attributes.position;
     const normal = new THREE.Vector3();
     for (let i = 0; i < positions.count; i++) {
       normal.fromBufferAttribute(positions, i).normalize();
-      let height = (Math.sin(normal.x * 53 + normal.y * 23) * Math.cos(normal.z * 47 - normal.y * 19) + Math.sin(normal.x * 113 + normal.z * 91) * 0.24) * 0.055;
+      let height = (Math.sin(normal.x * 53 + normal.y * 23) * Math.cos(normal.z * 47 - normal.y * 19) + Math.sin(normal.x * 113 + normal.z * 91) * 0.24) * 0.030;
       for (const crater of craterCenters) {
-        const distance = Math.acos(THREE.MathUtils.clamp(normal.dot(crater.direction), -1, 1)) / crater.radius;
-        if (distance < 1.3) height += distance < 0.9 ? -Math.pow(1 - distance / 0.9, 1.6) * crater.depth : Math.exp(-Math.pow((distance - 1.0) * 7, 2)) * crater.depth * 0.55;
+        const irregularity = 1 + Math.sin(normal.x * 129 + normal.z * 173) * 0.09;
+        const distance = Math.acos(THREE.MathUtils.clamp(normal.dot(crater.direction), -1, 1)) / (crater.radius * irregularity);
+        if (distance < 1.3) height += distance < 0.9 ? -Math.pow(1 - distance / 0.9, 1.6) * crater.depth : Math.exp(-Math.pow((distance - 1.0) * 7, 2)) * crater.depth * 0.24;
       }
       positions.setXYZ(i, normal.x * (planetRadius + height), normal.y * (planetRadius + height), normal.z * (planetRadius + height));
     }
     planetGeometry.computeVertexNormals();
-    // Keep the texture's pole away from the visible horizon to avoid radial stretching.
-    planetGeometry.rotateZ(Math.PI / 2);
     const terrainCanvas = document.createElement('canvas');
     terrainCanvas.width = 2048;
     terrainCanvas.height = 1024;
     const terrainContext = terrainCanvas.getContext('2d');
-    terrainContext.fillStyle = '#767573';
+    terrainContext.fillStyle = '#777674';
     terrainContext.fillRect(0, 0, 2048, 1024);
-    for (let i = 0; i < 42000; i++) {
-      const gray = Math.floor(35 + random() * 155);
-      terrainContext.fillStyle = `rgba(${gray},${gray},${gray},${0.12 + random() * 0.28})`;
-      terrainContext.fillRect(random() * 2048, random() * 1024, 0.6 + random() * 3.0, 0.6 + random() * 2.0);
+    // Layer deterministic noise at several scales instead of repeating ring stamps.
+    for (const [noiseWidth, noiseHeight, opacity] of [[12, 6, 0.28], [48, 24, 0.26], [160, 80, 0.22], [512, 256, 0.15], [1024, 512, 0.09]]) {
+      const noiseCanvas = document.createElement('canvas');
+      noiseCanvas.width = noiseWidth;
+      noiseCanvas.height = noiseHeight;
+      const noiseContext = noiseCanvas.getContext('2d');
+      const pixels = noiseContext.createImageData(noiseWidth, noiseHeight);
+      for (let i = 0; i < pixels.data.length; i += 4) {
+        const value = Math.floor(35 + random() * 170);
+        pixels.data[i] = pixels.data[i + 1] = pixels.data[i + 2] = value;
+        pixels.data[i + 3] = 255;
+      }
+      noiseContext.putImageData(pixels, 0, 0);
+      terrainContext.globalAlpha = opacity;
+      terrainContext.drawImage(noiseCanvas, 0, 0, 2048, 1024);
     }
-    // Tiled crater relief supplies crisp local detail even on a large horizon.
-    for (let i = 0; i < 940; i++) {
+    terrainContext.globalAlpha = 1;
+    // Sparse eroded depressions: irregular edges, gentle shading, no outlined rims.
+    for (let i = 0; i < 44; i++) {
       const x = random() * 2048, y = random() * 1024;
-      const radius = 3 + Math.pow(random(), 2) * 38;
-      const relief = terrainContext.createRadialGradient(x - radius * 0.12, y + radius * 0.09, radius * 0.1, x, y, radius);
-      relief.addColorStop(0, '#52514f');
-      relief.addColorStop(0.65, '#686765');
-      relief.addColorStop(0.79, '#a09e98');
-      relief.addColorStop(0.88, '#8b8982');
-      relief.addColorStop(1, 'rgba(118,117,115,0)');
+      const radius = 12 + Math.pow(random(), 2) * 72;
+      const relief = terrainContext.createRadialGradient(x - radius * 0.20, y + radius * 0.15, radius * 0.1, x, y, radius);
+      relief.addColorStop(0, 'rgba(43,42,40,.28)');
+      relief.addColorStop(0.58, 'rgba(69,68,65,.16)');
+      relief.addColorStop(0.88, 'rgba(147,145,139,.08)');
+      relief.addColorStop(1, 'rgba(119,118,116,0)');
       terrainContext.fillStyle = relief;
       terrainContext.beginPath();
-      terrainContext.arc(x, y, radius, 0, Math.PI * 2);
+      for (let point = 0; point <= 16; point++) {
+        const angle = point / 16 * Math.PI * 2;
+        const boundary = radius * (0.80 + random() * 0.20);
+        const px = x + Math.cos(angle) * boundary, py = y + Math.sin(angle) * boundary * 0.86;
+        if (point === 0) terrainContext.moveTo(px, py);
+        else terrainContext.lineTo(px, py);
+      }
+      terrainContext.closePath();
       terrainContext.fill();
-      terrainContext.strokeStyle = 'rgba(30,29,28,.22)';
-      terrainContext.lineWidth = Math.max(0.6, radius * 0.09);
-      terrainContext.beginPath();
-      terrainContext.arc(x, y, radius * 0.72, Math.PI * 0.03, Math.PI * 0.83);
-      terrainContext.stroke();
     }
     const terrainTexture = new THREE.CanvasTexture(terrainCanvas);
     terrainTexture.colorSpace = THREE.SRGBColorSpace;
     terrainTexture.wrapS = terrainTexture.wrapT = THREE.RepeatWrapping;
-    terrainTexture.repeat.set(12, 6);
+    terrainTexture.repeat.set(4, 2);
     terrainTexture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-    const planet = mesh(planetGeometry, new THREE.MeshStandardMaterial({color: 0x525559, map: terrainTexture, bumpMap: terrainTexture, bumpScale: 0.055, roughness: 1, metalness: 0.0}), scene, [0, -19.5, -5]);
+    const planet = mesh(planetGeometry, new THREE.MeshStandardMaterial({color: 0x535353, map: terrainTexture, bumpMap: terrainTexture, bumpScale: 0.032, roughness: 1, metalness: 0.0}), scene, [0, -19.5, -5]);
     const atmosphereMaterial = new THREE.ShaderMaterial({
       uniforms: {tint: {value: new THREE.Color(0x7fcad4)}},
       vertexShader: 'varying vec3 vNormal; varying vec3 vPosition; void main(){ vec4 p=modelViewMatrix*vec4(position,1.);vPosition=p.xyz;vNormal=normalize(normalMatrix*normal);gl_Position=projectionMatrix*p;}',
@@ -222,6 +231,27 @@ if (container && canvas) {
       atmosphereMaterial.uniforms.tint.value.set(color);
       needsStaticFrame = true;
     };
+    const sceneProjects = {
+      taskboard: {insignia: 'TB', label: 'TASKBOARD', accent: '#87e8ee'},
+      flow: {insignia: 'BA', label: 'BRIEFACTIONS', accent: '#b5a0ff'},
+    };
+    function selectProject(project) {
+      const selected = sceneProjects[project];
+      if (!selected) return;
+      insigniaContext.clearRect(0, 0, 512, 256);
+      insigniaContext.fillStyle = '#f4f6ee';
+      insigniaContext.textAlign = 'center';
+      insigniaContext.textBaseline = 'middle';
+      insigniaContext.font = '700 158px Arial, Helvetica, sans-serif';
+      insigniaContext.fillText(selected.insignia, 256, 105);
+      insigniaContext.font = '500 23px Arial, Helvetica, sans-serif';
+      insigniaContext.fillStyle = '#b9c8ce';
+      insigniaContext.fillText(selected.label, 256, 216);
+      insigniaTexture.needsUpdate = true;
+      sceneAccent(selected.accent);
+      needsStaticFrame = true;
+    }
+    selectProject(document.documentElement.dataset.project || 'taskboard');
     sceneAccent(getComputedStyle(document.documentElement).getPropertyValue('--accent').trim());
     function resize() {
       const rect = container.getBoundingClientRect();
@@ -298,10 +328,11 @@ if (container && canvas) {
       cursorY = THREE.MathUtils.clamp((event.clientY - bounds.top - bounds.height / 2) / bounds.height, -0.5, 0.5);
     }, {passive: true});
     window.addEventListener('portfolio:scene', event => {
-      const {action, accent: color} = event.detail || {};
+      const {action, accent: color, project} = event.detail || {};
       if (action === 'next') desiredYaw += Math.PI / 4;
       if (action === 'prev') desiredYaw -= Math.PI / 4;
       if (action === 'reset') {desiredYaw = 0; desiredPitch = 0; velocity = 0;}
+      if (project) selectProject(project);
       if (color) sceneAccent(color);
       needsStaticFrame = true;
       if (paused || reduced.matches) render(performance.now());

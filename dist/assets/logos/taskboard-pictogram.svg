@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Original portfolio board/ticket pictogram; not an existing TaskBoard brand mark. -->
+  <rect x="7" y="10" width="50" height="44" rx="7" stroke="#F4F6EE" stroke-width="3"/>
+  <path d="M8 21h48M24 22v30M41 22v30" stroke="#F4F6EE" stroke-opacity=".55" stroke-width="2"/>
+  <rect x="12" y="27" width="7" height="10" rx="1.5" fill="#87E8EE"/>
+  <rect x="29" y="27" width="7" height="16" rx="1.5" fill="#87E8EE"/>
+  <rect x="46" y="27" width="7" height="7" rx="1.5" fill="#87E8EE"/>
+</svg>

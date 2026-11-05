@@ -1,0 +1,11 @@
+BriefActions: briefactions.svg reproduces the app's existing mark and original
+#0084C7 color from briefactions/web/public/flow.svg, also used as two ribbon
+paths in briefactions/web/src/ProductBrand.jsx. Source clone commit f82ff4f.
+
+TaskBoard: the source app currently uses text initials "TB" in the landing and
+sidebar components, with no separate logo asset found in frontend/. Source
+clone commit 4681082. taskboard-pictogram.svg is a new portfolio illustration
+of a board and tickets, not an existing official TaskBoard brand mark.
+
+orbit.js draws these same SVG paths directly into its local lens canvas,
+retaining project names below the symbols and avoiding asynchronous loads.

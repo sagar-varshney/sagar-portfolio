@@ -28,3 +28,13 @@ Three screenshots were copied unchanged from `docs/screenshots/review-dark.png`,
 ## Scope
 
 No user adoption, real-world productivity impact, production latency, or new test-coverage claims are made. The project suites were not rerun as part of this portfolio edit. Portfolio validation covers its own assets, links, scene controls, dialogs, keyboard behavior and responsive presentation.
+
+## Product presentation update
+
+The TaskBoard walkthrough adds captures of the create-ticket form and a ticket-detail screen from the same unchanged frontend and isolated fictional fixture workspace. Form values are illustrative and were not submitted. Screenshots demonstrate the interface, not production backend validation.
+
+BriefActions uses its original three screenshots in a guided review → task details → calendar walkthrough. Full-size source images remain available from every step.
+
+BriefActions’ blue ribbon mark is copied from its `web/public/flow.svg`. TaskBoard’s source contains only a text “TB” brand, so the portfolio uses a newly drawn board/ticket pictogram. See `dist/assets/logos/PROVENANCE.txt` for exact sources. The project repositories and their actual branding were not changed.
+
+The sharing card is original SVG artwork rasterized to a 1200×630 JPEG; its source is retained as `dist/assets/social-preview-source.svg`.

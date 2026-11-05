@@ -97,7 +97,7 @@ if (container && canvas) {
     const insigniaContext = insigniaCanvas.getContext('2d');
     const insigniaTexture = new THREE.CanvasTexture(insigniaCanvas);
     insigniaTexture.colorSpace = THREE.SRGBColorSpace;
-    mesh(new THREE.PlaneGeometry(1.03, 0.515), new THREE.MeshBasicMaterial({map: insigniaTexture, transparent: true, depthWrite: false, toneMapped: false}), lens, [0, 0.035, 0.08]);
+    mesh(new THREE.PlaneGeometry(1.34, 0.67), new THREE.MeshBasicMaterial({map: insigniaTexture, transparent: true, depthWrite: false, toneMapped: false}), lens, [0, 0.035, 0.08]);
     const signalStrip = mesh(new THREE.BoxGeometry(0.22, 0.017, 0.014), accent, lens, [0, -0.38, 0.08]);
     for (const [r, tube, rot, arc] of [
       [1.54, 0.065, [0.30, 0.52, 0.52], Math.PI * 1.18],
@@ -232,18 +232,44 @@ if (container && canvas) {
       needsStaticFrame = true;
     };
     const sceneProjects = {
-      taskboard: {insignia: 'TB', label: 'TASKBOARD', accent: '#87e8ee'},
-      flow: {insignia: 'BA', label: 'BRIEFACTIONS', accent: '#b5a0ff'},
+      taskboard: {label: 'TASKBOARD', accent: '#87e8ee'},
+      flow: {label: 'BRIEFACTIONS', accent: '#b5a0ff'},
     };
+    // Exact BriefActions product mark from web/public/flow.svg (original blue).
+    const briefActionsMark = new Path2D('M6 25 25 6h33L46 18H30L18 30v16H6V25Zm52 14L39 58H6l12-12h16l12-12V18h12v21Z');
+    // TaskBoard's app uses text "TB"; this board symbol is a new portfolio pictogram.
+    const taskboardOutline = new Path2D('M14 10h36a7 7 0 0 1 7 7v30a7 7 0 0 1-7 7H14a7 7 0 0 1-7-7V17a7 7 0 0 1 7-7Z');
+    const taskboardDividers = new Path2D('M8 21h48M24 22v30M41 22v30');
     function selectProject(project) {
       const selected = sceneProjects[project];
       if (!selected) return;
       insigniaContext.clearRect(0, 0, 512, 256);
-      insigniaContext.fillStyle = '#f4f6ee';
+      insigniaContext.save();
+      insigniaContext.translate(168, 18);
+      insigniaContext.scale(2.75, 2.75);
+      if (project === 'flow') {
+        insigniaContext.fillStyle = '#0084C7';
+        insigniaContext.shadowColor = 'rgba(0,132,199,.30)';
+        insigniaContext.shadowBlur = 9;
+        insigniaContext.fill(briefActionsMark);
+      } else {
+        insigniaContext.strokeStyle = '#F4F6EE';
+        insigniaContext.lineWidth = 3;
+        insigniaContext.stroke(taskboardOutline);
+        insigniaContext.globalAlpha = 0.55;
+        insigniaContext.lineWidth = 2;
+        insigniaContext.stroke(taskboardDividers);
+        insigniaContext.globalAlpha = 1;
+        insigniaContext.fillStyle = '#87E8EE';
+        for (const [x, y, height] of [[12, 27, 10], [29, 27, 16], [46, 27, 7]]) {
+          insigniaContext.beginPath();
+          insigniaContext.roundRect(x, y, 7, height, 1.5);
+          insigniaContext.fill();
+        }
+      }
+      insigniaContext.restore();
       insigniaContext.textAlign = 'center';
       insigniaContext.textBaseline = 'middle';
-      insigniaContext.font = '700 158px Arial, Helvetica, sans-serif';
-      insigniaContext.fillText(selected.insignia, 256, 105);
       insigniaContext.font = '500 23px Arial, Helvetica, sans-serif';
       insigniaContext.fillStyle = '#b9c8ce';
       insigniaContext.fillText(selected.label, 256, 216);
@@ -261,9 +287,9 @@ if (container && canvas) {
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      const mobile = width < 760;
-      assembly.position.set(mobile ? 0 : 2.32, mobile ? -0.70 : 0.38, 0);
-      assembly.scale.setScalar(mobile ? THREE.MathUtils.clamp(camera.aspect * 1.32, 0.45, 0.76) : Math.min(1.10, camera.aspect / 1.60));
+      const mobile = width <= 760;
+      assembly.position.set(mobile ? 0 : 2.32, mobile ? -0.62 : 0.38, 0);
+      assembly.scale.setScalar(mobile ? THREE.MathUtils.clamp(camera.aspect * 1.18, 0.45, 0.76) : Math.min(1.10, camera.aspect / 1.60));
       planet.position.y = atmosphere.position.y = mobile ? -20.4 : -19.5;
       render(performance.now());
     }

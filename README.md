@@ -25,9 +25,9 @@ Built with **Python, React, Node.js, PostgreSQL, and Supabase Auth**.
 ## The portfolio experience
 
 - An original Three.js orbital sculpture with drag controls, project-specific core marks, accent colors, and screenshot previews.
-- Real project screenshots and case studies covering the problem, implementation, engineering choices, and results.
+- Guided product walkthroughs with real screenshots, plus expandable engineering details.
 - A browsable toolkit with Python selected first.
-- Responsive layouts, mobile navigation, keyboard-accessible dialogs, reduced-motion support, and a motion toggle.
-- Self-hosted fonts and Three.js modules, plus a CSS fallback when WebGL is unavailable.
+- A compact mobile hero, readable project copy, keyboard-accessible dialogs, reduced-motion support, and a motion toggle.
+- Self-hosted fonts and Three.js modules, a CSS fallback, and a custom social-sharing preview.
 
 Project claims and screenshot provenance are recorded in [the evidence notes](docs/project-evidence.md). TaskBoard captures show its actual frontend with fictional local sample data; BriefActions captures show an invented example meeting.

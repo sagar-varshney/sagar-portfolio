@@ -1,39 +1,44 @@
 const projectContent = {
   taskboard: `
-    <p class="eyebrow muted">FULL-STACK DEVELOPMENT / AI WORKFLOWS</p>
-    <h2 id="dialog-title">TaskBoard</h2>
-    <p class="dialog-intro">A project workspace where the assistant follows the same permission rules as the people using it.</p>
-    <div class="dialog-stats"><div><b>40+</b><span>API operations</span></div><div><b>12</b><span>relational tables</span></div><div><b>9</b><span>approved AI tools</span></div></div>
+    <p class="eyebrow muted">PROJECT WORKSPACE / FULL-STACK + AI</p>
+    <h2 id="dialog-title"><img class="dialog-logo" src="assets/logos/taskboard-pictogram.svg" alt="" width="42" height="42">TaskBoard</h2>
+    <p class="dialog-intro">Give your team one place to plan projects and keep work moving.</p>
+    <div class="project-links case-top-links"><a class="button light" href="https://taskboard-frontend-ochre.vercel.app" target="_blank" rel="noopener">Open TaskBoard ↗<span class="sr-only"> (new tab)</span></a><a class="text-link" href="https://github.com/sagar-varshney/TaskBoard-Project-Management" target="_blank" rel="noopener">View source ↗<span class="sr-only"> (new tab)</span></a></div>
+    <div class="project-walkthrough" data-walkthrough="taskboard"></div>
+    <details class="case-engineering"><summary>How I built it <span aria-hidden="true">+</span></summary><div class="case-engineering-content">
     <h3>The problem</h3><p>Projects, sprints, tickets, discussions, and supporting files need shared context. Adding an assistant also creates a permission problem: its actions need the same account and role checks as ordinary application requests.</p>
-    <h3>What I built</h3><p>I built a Next.js 15 / React 19 interface backed by Express and MySQL. The application brings together project and sprint management, role-aware tickets, attachment collaboration, and a LangGraph assistant using Gemini and Groq.</p>
-    <h3>One decision that matters</h3><p>The assistant’s nine approved tools call the authenticated application API. That adds an API hop and keeps permission enforcement in the backend, where current account state and roles are already checked.</p>
+    <h3>The implementation</h3><p>I built a Next.js 15 / React 19 interface backed by Express and MySQL. It connects project and sprint management, role-aware tickets, attachment collaboration, and a LangGraph assistant using Gemini and Groq.</p>
+    <div class="dialog-stats"><div><b>40+</b><span>API operations</span></div><div><b>12</b><span>relational tables</span></div><div><b>9</b><span>AI tools</span></div></div>
+    <h3>One decision that matters</h3><p>The assistant’s nine application tools call the authenticated API. That adds an API hop and keeps permission enforcement in the backend, where account state and roles are already checked.</p>
     <p class="case-code-link"><a href="https://github.com/sagar-varshney/TaskBoard-Project-Management/blob/main/src/services/agent.service.js" target="_blank" rel="noopener">See the API boundary in the source ↗<span class="sr-only"> (new tab)</span></a></p>
-    <h3>The result</h3><p>A deployed application with more than 40 API operations, a 12-table schema, eight SQL migrations, three user roles, and tool-based AI workflows. Cloudflare R2 supports attachment uploads, versions, metadata, comments, and saved analysis history.</p>
-    <figure class="case-screenshot"><a href="assets/projects/taskboard-board.jpg" target="_blank" rel="noopener"><img src="assets/projects/taskboard-board.jpg" alt="TaskBoard's actual frontend displaying a sample project workspace" width="1440" height="900" loading="lazy"></a><figcaption>TaskBoard interface · local sample workspace. Open the image for full size.</figcaption></figure>
-    <div class="tags"><span>Next.js 15</span><span>React 19</span><span>Express</span><span>MySQL</span><span>LangGraph</span><span>Cloudflare R2</span></div>
-    <div class="project-links"><a class="text-link" href="https://taskboard-frontend-ochre.vercel.app" target="_blank" rel="noopener">Visit live site ↗<span class="sr-only"> (new tab)</span></a><a class="text-link" href="https://github.com/sagar-varshney/TaskBoard-Project-Management" target="_blank" rel="noopener">Explore source code ↗<span class="sr-only"> (new tab)</span></a></div>`,
+    <h3>What works today</h3><p>A deployed application with more than 40 API operations, a 12-table schema, eight SQL migrations, three user roles, and tool-based AI workflows. Cloudflare R2 supports attachment uploads, versions, metadata, comments, and saved analysis history.</p>
+    <div class="tags"><span>Next.js 15</span><span>React 19</span><span>Express</span><span>MySQL</span><span>LangGraph</span><span>Cloudflare R2</span></div></div></details>`,
   flow: `
-    <p class="eyebrow muted">FULL-STACK DEVELOPMENT / EVIDENCE-BACKED NLP</p>
-    <h2 id="dialog-title">BriefActions</h2>
-    <p class="dialog-intro">From a meeting transcript to a plan you can check, correct, and follow through.</p>
+    <p class="eyebrow muted">MEETINGS TO ACTION / FULL-STACK + NLP</p>
+    <h2 id="dialog-title"><img class="dialog-logo" src="assets/logos/briefactions.svg" alt="" width="42" height="42">BriefActions</h2>
+    <p class="dialog-intro">Turn a meeting transcript into a plan you can check, correct, and follow through.</p>
+    <div class="project-links case-top-links"><a class="button light" href="https://briefactions.onrender.com/#product-demo" target="_blank" rel="noopener">Try the public demo ↗<span class="sr-only"> (new tab)</span></a><a class="text-link" href="https://github.com/sagar-varshney/BriefActions" target="_blank" rel="noopener">View source ↗<span class="sr-only"> (new tab)</span></a></div>
+    <div class="project-walkthrough" data-walkthrough="flow"></div>
+    <details class="case-engineering"><summary>How I built it <span aria-hidden="true">+</span></summary><div class="case-engineering-content">
     <h3>The problem</h3><p>Meeting commitments are easy to lose. An extracted task is also difficult to trust without knowing which words support it, who owns it, or whether the deadline was actually stated.</p>
-    <h3>What I built</h3><p>I built a Python extraction workflow, a React review workspace, a Node API, and account-scoped PostgreSQL storage with Supabase Auth. Each proposed task keeps its exact transcript evidence. Missing details stay Unknown, and users review and confirm what enters their plan.</p>
+    <h3>The implementation</h3><p>I built a Python extraction workflow, a React review workspace, a Node API, and account-scoped PostgreSQL storage with Supabase Auth. Each proposed task keeps its exact transcript evidence. Missing details stay Unknown, and users review and confirm what enters their plan.</p>
     <p>Rule-based extraction handles the everyday workflow. TF-IDF summaries, K-Means grouping, and Logistic Regression add downstream suggestions. Reviewed plans continue into task progress, calendar deadlines, versioned corrections, and exports.</p>
     <h3>One decision that matters</h3><p>I reused bounded Python workers so repeated operations do not restart the interpreter and reload its libraries. A separate lightweight lane reserves capacity for task, calendar, and history requests while analysis runs. Both lanes still share the host’s CPU and database.</p>
     <div class="case-benchmark"><span>DOCUMENTED LOCAL PERFORMANCE DRILL</span><strong>1,349 ms → 9 ms</strong><p>Warm analysis median on a small synthetic transcript after worker reuse. First analysis took 1,253 ms. This measures local process/import overhead, not hosted latency.</p><a href="https://github.com/sagar-varshney/BriefActions/blob/main/docs/performance.md" target="_blank" rel="noopener">Read the benchmark conditions ↗<span class="sr-only"> (new tab)</span></a></div>
-    <h3>The result</h3><p>A deployed meeting-to-task workflow with supporting passages, explicit user review, saved plan history, task progress, calendar views, and export. The public demo lets visitors explore a prepared example without signing in.</p>
-    <figure class="case-screenshot"><a href="assets/projects/briefactions-review.png" target="_blank" rel="noopener"><img src="assets/projects/briefactions-review.png" alt="BriefActions showing a task proposal beside its highlighted source transcript" width="1440" height="1500" loading="lazy"></a><figcaption>Product screenshot · invented example meeting. Open the image for full size.</figcaption></figure>
-    <details class="case-more-shots"><summary>Explore task details and calendar <span aria-hidden="true">+</span></summary><figure class="case-screenshot"><a href="assets/projects/briefactions-task-details.png" target="_blank" rel="noopener"><img src="assets/projects/briefactions-task-details.png" alt="BriefActions task inspector with progress, deadline, and supporting meeting evidence" width="1440" height="1000" loading="lazy"></a><figcaption>Task details · invented example meeting.</figcaption></figure><figure class="case-screenshot"><a href="assets/projects/briefactions-calendar.png" target="_blank" rel="noopener"><img src="assets/projects/briefactions-calendar.png" alt="BriefActions calendar displaying meeting dates and task deadlines" width="1440" height="1500" loading="lazy"></a><figcaption>Calendar · invented example meeting.</figcaption></figure></details>
-    <div class="tags"><span>Python</span><span>React</span><span>Node.js</span><span>PostgreSQL</span><span>Supabase Auth</span></div>
-    <div class="project-links"><a class="text-link" href="https://briefactions.onrender.com/#product-demo" target="_blank" rel="noopener">Try the public demo ↗<span class="sr-only"> (new tab)</span></a><a class="text-link" href="https://github.com/sagar-varshney/BriefActions" target="_blank" rel="noopener">Explore source code ↗<span class="sr-only"> (new tab)</span></a></div>`
+    <h3>What works today</h3><p>A deployed meeting-to-task workflow with supporting passages, explicit user review, saved plan history, task progress, calendar views, and export. The public demo offers a prepared example without signing in.</p>
+    <div class="tags"><span>Python</span><span>React</span><span>Node.js</span><span>PostgreSQL</span><span>Supabase Auth</span></div></div></details>`
 };
 const dialog = document.querySelector('#project-dialog');
 const dialogContent = document.querySelector('#dialog-content');
 let opener;
+let activeWalkthrough;
 document.querySelectorAll('button[data-project]').forEach(button => {
   button.addEventListener('click', () => {
     opener = button;
+    activeWalkthrough?.destroy();
     dialogContent.innerHTML = projectContent[button.dataset.project];
+    const mount = dialogContent.querySelector('[data-walkthrough]');
+    activeWalkthrough = window.initProjectWalkthrough(mount, button.dataset.project);
     dialog.showModal();
     dialog.scrollTop = 0;
     document.body.classList.add('dialog-open');
@@ -47,23 +52,11 @@ dialog.addEventListener('click', event => {
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
 });
 dialog.addEventListener('close', () => {
+  activeWalkthrough?.destroy();
+  activeWalkthrough = null;
   document.body.classList.remove('dialog-open');
   opener?.focus();
 });
-document.querySelectorAll('[data-filter]').forEach(button => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('[data-filter]').forEach(filter => {
-      const selected = filter === button;
-      filter.classList.toggle('active', selected);
-      filter.setAttribute('aria-pressed', String(selected));
-    });
-    document.querySelectorAll('[data-category]').forEach(project => {
-      project.hidden = button.dataset.filter !== 'all' && !project.dataset.category.split(' ').includes(button.dataset.filter);
-    });
-  });
-});
-
-
 // Shared motion state for the orbital scene and CSS details.
 const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
 let motionPaused=motionPreference.matches;
@@ -103,8 +96,8 @@ document.querySelector('#copy-email').addEventListener('click',async()=>{const s
 
 // The featured project selector also turns the orbital sculpture.
 const featuredProjects=[
-  {key:'taskboard',name:'TaskBoard',image:'assets/projects/taskboard-board.jpg',alt:'TaskBoard interface with sample projects and tickets',accent:'#88d9ed'},
-  {key:'flow',name:'BriefActions',image:'assets/projects/briefactions-review.png',alt:'BriefActions review workspace with supporting transcript evidence',accent:'#c3a5ed'}
+  {key:'taskboard',name:'TaskBoard',image:'assets/projects/taskboard-board.jpg',alt:'TaskBoard interface with sample projects and tickets',logo:'assets/logos/taskboard-pictogram.svg',accent:'#88d9ed'},
+  {key:'flow',name:'BriefActions',image:'assets/projects/briefactions-review.png',alt:'BriefActions review workspace with supporting transcript evidence',logo:'assets/logos/briefactions.svg',accent:'#c3a5ed'}
 ];
 let featuredIndex=0;
 function featureProject(index,action){
@@ -117,6 +110,8 @@ function featureProject(index,action){
   document.querySelector('#scene-identity').textContent='PROJECT '+String(featuredIndex+1).padStart(2,'0')+' / '+project.name.toUpperCase();
   document.querySelector('#hero-scene').setAttribute('aria-label','Interactive orbital sculpture featuring '+project.name+' above a planetary horizon');
   const image=document.querySelector('#featured-image');image.src=project.image;image.alt=project.alt;
+  document.querySelector('#fallback-logo').src=project.logo;
+  document.querySelector('#fallback-project').textContent=project.name;
   const open=document.querySelector('#hero-open');open.dataset.project=project.key;open.setAttribute('aria-label','Explore '+project.name);
   const thumbnail=document.querySelector('#hero-thumbnail');thumbnail.dataset.project=project.key;thumbnail.setAttribute('aria-label','Preview '+project.name);
   document.querySelectorAll('[data-accent]').forEach(swatch=>swatch.setAttribute('aria-pressed',String(swatch.dataset.accent===project.accent)));
